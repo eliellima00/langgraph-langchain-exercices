@@ -79,6 +79,10 @@ Cada script gera um PNG com a representação do grafo no mesmo diretório (`*.p
 - `6-reative-agent.py` mostra um agente que faz binding com várias ferramentas locais (`client_data_tool`, `client_farm_tool`, `client_products_tool`, `sum_values_tool`). O agente usa `llm.bind_tools(tools)` e `ToolNode` para executar chamadas de ferramenta quando o chat model retorna uma `ToolMessage`, retornando em seguida ao agente para processar o resultado.
 - `7-memory-agent.py` mostra como usar `MemorySaver` (via `checkpointer=memory` no `builder.compile`) e enviar `config={'thread_id':'1'}` ao `invoke` para preservar e recuperar o estado entre múltiplas invocaçōes do grafo. Isso permite fluxos stateful (ex.: perguntar dados em duas execuções separadas e o grafo manter o contexto).
 
+  ⚠️ Nota: os scripts `6-reative-agent.py` e `7-memory-agent.py` também usam `ChatOpenAI` e portanto exigem variáveis de ambiente configuradas para a API (ex.: `OPENAI_API_KEY`). Se não quiser usar a API real durante testes, simule as mensagens como em `3-chat-model-simulated.py`.
+
+  - Exemplo rápido para o `7-memory-agent.py`: o script já demonstra duas invocações (`result1` e `result2`) com o mesmo `thread_id` — ao rodar o script você verá que a consulta inicial recupera dados e a segunda pergunta usa o contexto salvo para responder quais produtos foram comprados.
+
 ## Sugestões e boas práticas
 
 - Sempre execute os scripts num ambiente isolado (venv) para evitar correr riscos com dependências.
