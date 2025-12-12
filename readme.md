@@ -71,18 +71,6 @@ python3 7-memory-agent.py
 
 Cada script gera um PNG com a representação do grafo no mesmo diretório (`*.png`) e imprime o resultado do `invoke` no console.
 
-## Observações sobre `4-call-llm.py` e `5-tool-calling-llm.py`
-
-- Ambos os scripts usam `langchain_openai.ChatOpenAI`, que precisa das credenciais de API para funcionar.
-- No arquivo `4-call-llm.py`, `llm = ChatOpenAI(model="gpt-4o")` está configurado para o modelo `gpt-4o`. Caso não tenha acesso, troque para outro modelo compatível (p.ex. `gpt-4o-mini`, `gpt-4o-realtime-preview` ou `gpt-3.5-turbo`) caso disponível.
-- No `5-tool-calling-llm.py`, a função `client_data_tool` demonstra uma ferramenta local simples; `ToolNode` executa a função quando o chat retorna uma `ToolMessage` — assim o agent pode acionar ferramentas e reinjetar o resultado no diálogo, simulando um loop ReAct simples.
-- `6-reative-agent.py` mostra um agente que faz binding com várias ferramentas locais (`client_data_tool`, `client_farm_tool`, `client_products_tool`, `sum_values_tool`). O agente usa `llm.bind_tools(tools)` e `ToolNode` para executar chamadas de ferramenta quando o chat model retorna uma `ToolMessage`, retornando em seguida ao agente para processar o resultado.
-- `7-memory-agent.py` mostra como usar `MemorySaver` (via `checkpointer=memory` no `builder.compile`) e enviar `config={'thread_id':'1'}` ao `invoke` para preservar e recuperar o estado entre múltiplas invocaçōes do grafo. Isso permite fluxos stateful (ex.: perguntar dados em duas execuções separadas e o grafo manter o contexto).
-
-  ⚠️ Nota: os scripts `6-reative-agent.py` e `7-memory-agent.py` também usam `ChatOpenAI` e portanto exigem variáveis de ambiente configuradas para a API (ex.: `OPENAI_API_KEY`). Se não quiser usar a API real durante testes, simule as mensagens como em `3-chat-model-simulated.py`.
-
-  - Exemplo rápido para o `7-memory-agent.py`: o script já demonstra duas invocações (`result1` e `result2`) com o mesmo `thread_id` — ao rodar o script você verá que a consulta inicial recupera dados e a segunda pergunta usa o contexto salvo para responder quais produtos foram comprados.
-
 ## Sugestões e boas práticas
 
 - Sempre execute os scripts num ambiente isolado (venv) para evitar correr riscos com dependências.
