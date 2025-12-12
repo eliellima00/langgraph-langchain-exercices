@@ -11,6 +11,8 @@ Este repositório é ideal para estudos e testes rápidos: cada script contém u
 - `3-chat-model-simulated.py` — Simulação de ChatModel: usa `MessagesState` e `HumanMessage`/`AIMessage` para simular troca de mensagens e compor resposta. Gera `3-chat-model.png`.
 - `4-call-llm.py` — Chamada real a um chat model (ChatOpenAI) com `langchain_openai`. Requer variáveis de ambiente (ver `.env.example`) para habilitar chamadas à API. Gera `4-call-llm.png`.
 - `5-tool-calling-llm.py` — Exemplo de binding de ferramentas (tool binding): demonstra `ToolNode`, `tools_condition` e como um model pode emitir chamada de ferramenta e o grafo executar a ferramenta. Requer variáveis de ambiente para LLM. Gera `5-tool-calling-llm.png`.
+- `6-reative-agent.py` — Agente ReAct com múltiplas ferramentas. Demonstra um loop agente → ferramenta → agente até que o agente retorne uma resposta final. Gera `6-reative-agent.png`.
+- `7-memory-agent.py` — Demonstra persistência de estado entre invocações usando `MemorySaver` (checkpointer). Mostra como reusar `thread_id` para recuperar o estado anterior. Gera `7-memory-agent.png`.
 - `.env.example` — Exemplo de variáveis de ambiente (copie para `.env` e preencha).
 - `requirements.txt` — Lista de dependências usadas nos exemplos.
 
@@ -23,6 +25,8 @@ Este repositório é ideal para estudos e testes rápidos: cada script contém u
 - Mensagens em chat (`HumanMessage`, `AIMessage`) e `MessagesState` para fluxo conversacional
 - Invocação de LLMs via `ChatOpenAI` (LangChain) — como integrar com o grafo
 - Tool binding com `ToolNode` e `tools_condition` — exemplo de agentes simples
+- Agente ReAct e binding múltiplas `ToolNode` (loop `assistant -> tools -> assistant`), incluindo exemplos de funções locais de ferramenta.
+- Persistência de estado com `MemorySaver` (checkpointer) e uso de `thread_id` para recuperar histórico entre invocações.
 
 ## Pré-requisitos
 
@@ -61,6 +65,8 @@ python3 3-chat-model-simulated.py
 # Requer .env com OPENAI_API_KEY:
 python3 4-call-llm.py
 python3 5-tool-calling-llm.py
+python3 6-reative-agent.py
+python3 7-memory-agent.py
 ```
 
 Cada script gera um PNG com a representação do grafo no mesmo diretório (`*.png`) e imprime o resultado do `invoke` no console.
@@ -70,6 +76,8 @@ Cada script gera um PNG com a representação do grafo no mesmo diretório (`*.p
 - Ambos os scripts usam `langchain_openai.ChatOpenAI`, que precisa das credenciais de API para funcionar.
 - No arquivo `4-call-llm.py`, `llm = ChatOpenAI(model="gpt-4o")` está configurado para o modelo `gpt-4o`. Caso não tenha acesso, troque para outro modelo compatível (p.ex. `gpt-4o-mini`, `gpt-4o-realtime-preview` ou `gpt-3.5-turbo`) caso disponível.
 - No `5-tool-calling-llm.py`, a função `client_data_tool` demonstra uma ferramenta local simples; `ToolNode` executa a função quando o chat retorna uma `ToolMessage` — assim o agent pode acionar ferramentas e reinjetar o resultado no diálogo, simulando um loop ReAct simples.
+- `6-reative-agent.py` mostra um agente que faz binding com várias ferramentas locais (`client_data_tool`, `client_farm_tool`, `client_products_tool`, `sum_values_tool`). O agente usa `llm.bind_tools(tools)` e `ToolNode` para executar chamadas de ferramenta quando o chat model retorna uma `ToolMessage`, retornando em seguida ao agente para processar o resultado.
+- `7-memory-agent.py` mostra como usar `MemorySaver` (via `checkpointer=memory` no `builder.compile`) e enviar `config={'thread_id':'1'}` ao `invoke` para preservar e recuperar o estado entre múltiplas invocaçōes do grafo. Isso permite fluxos stateful (ex.: perguntar dados em duas execuções separadas e o grafo manter o contexto).
 
 ## Sugestões e boas práticas
 
