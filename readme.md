@@ -11,7 +11,6 @@ Este repositório é ideal para estudos e testes rápidos: cada script contém u
 - `3-chat-model-simulated.py` — Simulação de ChatModel: usa `MessagesState` e `HumanMessage`/`AIMessage` para simular troca de mensagens e compor resposta. Gera `3-chat-model.png`.
 - `4-call-llm.py` — Chamada real a um chat model (ChatOpenAI) com `langchain_openai`. Requer variáveis de ambiente (ver `.env.example`) para habilitar chamadas à API. Gera `4-call-llm.png`.
 - `5-tool-calling-llm.py` — Exemplo de binding de ferramentas (tool binding): demonstra `ToolNode`, `tools_condition` e como um model pode emitir chamada de ferramenta e o grafo executar a ferramenta. Requer variáveis de ambiente para LLM. Gera `5-tool-calling-llm.png`.
-- `exercices_module_1.md` — Versão textual com exercícios descritivos e soluções (guia de aprendizado do módulo).
 - `.env.example` — Exemplo de variáveis de ambiente (copie para `.env` e preencha).
 - `requirements.txt` — Lista de dependências usadas nos exemplos.
 
